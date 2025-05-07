@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Student</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Share Tech Mono', monospace;
+            color: #e2ffe2;
+            background: black;
+            overflow: hidden;
+        }
+
+        .matrix {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: -1;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        .cyber-panel {
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 1px solid #00ffcc;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.2);
+            backdrop-filter: blur(4px);
+            margin-top: 80px;
+        }
+
+        .form-control {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid #00ffcc88;
+            color: #00bfff;
+        }
+
+        .form-control::placeholder {
+            color: #00bfff88;
+        }
+
+        .form-control:focus {
+            border-color: #00ffcc;
+            box-shadow: 0 0 5px #00ffcc88;
+            background-color: rgba(255, 255, 255, 0.07);
+            color: #00bfff;
+        }
+
+        .btn-success {
+            background-color: #00ffcc;
+            color: black;
+            border: none;
+            font-weight: bold;
+            box-shadow: 0 0 8px #00ffccaa;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid #00ffcc88;
+            color: #00ffcc;
+        }
+
+        .btn-secondary:hover {
+            background-color: #00ffcc;
+            color: black;
+        }
+
+        h2 {
+            text-shadow: 0 0 5px #00ffcc, 0 0 10px #00ffcc;
+            color: #00ffcc;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Matrix animation background -->
+<div class="matrix">
+    <canvas id="matrixCanvas"></canvas>
+</div>
+
+<div class="container">
+    <div class="cyber-panel">
+        <h2 class="mb-4">✏️ Update Student Record</h2>
+        <form method="POST" action="/update/{{ student.sno }}">
+            <div class="mb-3">
+                <input type="text" name="fname" class="form-control" placeholder="First Name" value="{{ student.fname }}" required>
+            </div>
+            <div class="mb-3">
+                <input type="text" name="lname" class="form-control" placeholder="Last Name" value="{{ student.lname }}" required>
+            </div>
+            <div class="mb-3">
+                <input type="number" name="age" class="form-control" placeholder="Age" value="{{ student.age }}" required>
+            </div>
+            <div class="mb-3">
+                <input type="text" name="city" class="form-control" placeholder="City" value="{{ student.city }}" required>
+            </div>
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-success">Update</button>
+                <a href="/" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Matrix animation script
+    const canvas = document.getElementById("matrixCanvas");
+    const ctx = canvas.getContext("2d");
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+
+    const letters = "アァイゥエオカサタナハマヤラワ0123456789".split("");
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+    const drops = Array.from({ length: columns }).fill(1);
+
+    function drawMatrix() {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#00ffcc";
+        ctx.font = fontSize + "px monospace";
+
+        drops.forEach((y, i) => {
+            const text = letters[Math.floor(Math.random() * letters.length)];
+            ctx.fillText(text, i * fontSize, y * fontSize);
+            drops[i] = y * fontSize > canvas.height && Math.random() > 0.975 ? 0 : y + 1;
+        });
+    }
+
+    setInterval(drawMatrix, 50);
+</script>
+
+</body>
+</html>
